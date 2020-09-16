@@ -1,7 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: utf8 -*-
 
-''' Slovak stemmer
+""" Slovak stemmer
 Adapted from the Czech stemmer with the following copyright
 
     Copyright © 2010 Luís Gomes <luismsgomes@gmail.com>.
@@ -12,24 +12,26 @@ It was also inspired by sumy:
 Ported from the Java implementation available at:
     http://members.unine.ch/jacques.savoy/clef/index.html
 
-'''
+"""
 from __future__ import division, print_function, unicode_literals
 
 import re
+import sys
 
 WORD_PATTERN = re.compile(r"^\w+$", re.UNICODE)
 
 
 def stem(word, aggressive=False):
-    if not isinstance(word, unicode):
+    if not isinstance(word, str):
         word = word.decode("utf8")
 
     if not WORD_PATTERN.match(word):
         return word
 
     if not word.islower() and not word.istitle() and not word.isupper():
-        print("warning: skipping word with mixed case: {}".format(word),
-              file=sys.stderr)
+        print(
+            "warning: skipping word with mixed case: {}".format(word), file=sys.stderr
+        )
         return word
 
     # all our pattern matching is done in lowercase
@@ -57,11 +59,24 @@ def _remove_case(word):
         if word.endswith("aťom"):
             return _palatalise(word[:-3])
     if len(word) > 5:
-        if word[-3:] in ("och", "ich", "ích", "ého", "ami", "emi", "ému",
-                         "ete", "eti", "iho", "ího", "ími", "imu", "aťa"):
+        if word[-3:] in (
+            "och",
+            "ich",
+            "ích",
+            "ého",
+            "ami",
+            "emi",
+            "ému",
+            "ete",
+            "eti",
+            "iho",
+            "ího",
+            "ími",
+            "imu",
+            "aťa",
+        ):
             return _palatalise(word[:-2])
-        if word[-3:] in ("ách", "ata", "aty", "ých", "ami",
-                         "ové", "ovi", "ými"):
+        if word[-3:] in ("ách", "ata", "aty", "ých", "ami", "ové", "ovi", "ými"):
             return word[:-3]
     if len(word) > 4:
         if word.endswith("om"):
@@ -98,18 +113,43 @@ def _remove_diminutive(word):
     if len(word) > 7 and word.endswith("oušok"):
         return word[:-5]
     if len(word) > 6:
-        if word[-4:] in ("ečok", "éčok", "ičok", "íčok", "enok", "énok",
-                         "inok", "ínok"):
+        if word[-4:] in (
+            "ečok",
+            "éčok",
+            "ičok",
+            "íčok",
+            "enok",
+            "énok",
+            "inok",
+            "ínok",
+        ):
             return _palatalise(word[:-3])
-        if word[-4:] in ("áčok", "ačok", "očok", "učok", "anok", "onok",
-                         "unok", "ánok"):
+        if word[-4:] in (
+            "áčok",
+            "ačok",
+            "očok",
+            "učok",
+            "anok",
+            "onok",
+            "unok",
+            "ánok",
+        ):
             return _palatalise(word[:-4])
     if len(word) > 5:
-        if word[-3:] in ("ečk", "éčk", "ičk", "íčk", "enk", "énk",
-                         "ink", "ínk"):
+        if word[-3:] in ("ečk", "éčk", "ičk", "íčk", "enk", "énk", "ink", "ínk"):
             return _palatalise(word[:-3])
-        if word[-3:] in ("áčk", "ačk", "očk", "učk", "ank", "onk",
-                         "unk", "átk", "ánk", "ušk"):
+        if word[-3:] in (
+            "áčk",
+            "ačk",
+            "očk",
+            "učk",
+            "ank",
+            "onk",
+            "unk",
+            "átk",
+            "ánk",
+            "ušk",
+        ):
             return word[:-3]
     if len(word) > 4:
         if word[-2:] in ("ek", "ék", "ík", "ik"):
@@ -140,8 +180,16 @@ def _remove_derivational(word):
         if word[-5:] in ("ovisk", "ovstv", "ovišt", "ovník"):
             return word[:-5]
     if len(word) > 6:
-        if word[-4:] in ("ások", "nosť", "teln", "ovec", "ovík",
-                         "ovtv", "ovin", "štin"):
+        if word[-4:] in (
+            "ások",
+            "nosť",
+            "teln",
+            "ovec",
+            "ovík",
+            "ovtv",
+            "ovin",
+            "štin",
+        ):
             return word[:-4]
         if word[-4:] in ("enic", "inec", "itel"):
             return _palatalise(word[:-3])
@@ -150,18 +198,43 @@ def _remove_derivational(word):
             return word[:-3]
         if word[-3:] in ("enk", "ián", "ist", "isk", "išt", "itb", "írn"):
             return _palatalise(word[:-2])
-        if word[-3:] in ("och", "ost", "ovn", "oun", "out", "ouš",
-                         "ušk", "kyn", "čan", "kář", "néř", "ník",
-                         "ctv", "stv"):
+        if word[-3:] in (
+            "och",
+            "ost",
+            "ovn",
+            "oun",
+            "out",
+            "ouš",
+            "ušk",
+            "kyn",
+            "čan",
+            "kář",
+            "néř",
+            "ník",
+            "ctv",
+            "stv",
+        ):
             return word[:-3]
     if len(word) > 4:
         if word[-2:] in ("áč", "ač", "án", "an", "ár", "ar", "ás", "as"):
             return word[:-2]
-        if word[-2:] in ("ec", "en", "ér", "ír", "ic", "in", "ín",
-                         "it", "iv"):
+        if word[-2:] in ("ec", "en", "ér", "ír", "ic", "in", "ín", "it", "iv"):
             return _palatalise(word[:-1])
-        if word[-2:] in ("ob", "ot", "ov", "oň", "ul", "yn", "čk", "čn",
-                         "dl", "nk", "tv", "tk", "vk"):
+        if word[-2:] in (
+            "ob",
+            "ot",
+            "ov",
+            "oň",
+            "ul",
+            "yn",
+            "čk",
+            "čn",
+            "dl",
+            "nk",
+            "tv",
+            "tk",
+            "vk",
+        ):
             return word[:-2]
     if len(word) > 3 and word[-1] in "cčklnt":
         return word[:-1]
@@ -185,12 +258,13 @@ def _palatalise(word):
 
 def main():
     import sys
+
     if len(sys.argv) != 2 or sys.argv[1] not in ("light", "aggressive"):
         sys.exit("usage: {} light|aggressive".format(sys.argv[0]))
     aggressive = sys.argv[1] == "aggressive"
     for line in sys.stdin:
-        print(*[stem(word, aggressive=aggressive)
-                for word in line.split()])
+        print(*[stem(word, aggressive=aggressive) for word in line.split()])
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
